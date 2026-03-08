@@ -12,7 +12,9 @@
 - [Li-Po Battery](https://www.aliexpress.com/item/1005009590723370.html?spm=a2g0o.cart.0.0.2dae38daCLOcHa&mp=1&pdp_npi=6%40dis%21CZK%21CZK%20624.67%21CZK%20218.63%21%21CZK%20218.63%21%21%21%40211b653717729246377494041e4aca%2112000049557506746%21ct%21CZ%214581780593%21%211%210%21)
 - [Battery charging regulator (U also need 1.2k ohm resistor)](https://www.aliexpress.com/item/1005007439657191.html?spm=a2g0o.cart.0.0.2dae38daCLOcHa&mp=1&pdp_npi=6%40dis%21CZK%21CZK%2042.98%21CZK%2042.98%21%21CZK%2042.98%21%21%21%40211b653717729246377494041e4aca%2112000040759803425%21ct%21CZ%214581780593%21%211%210%21&pdp_ext_f=%7B%22cart2PdpParams%22%3A%7B%22pdpBusinessMode%22%3A%22retail%22%7D%7D)
 - [USB-C header with 5.1K](https://www.aliexpress.com/item/1005009993484503.html?spm=a2g0o.cart.0.0.73be38davhnDor&mp=1&pdp_npi=6%40dis%21CZK%21CZK%2043.42%21CZK%2038.63%21%21CZK%2038.63%21%21%21%402103919917729267772442961e22fa%2112000050785974007%21ct%21CZ%214581780593%21%211%210%21)
-- LEDs (Power / Charging indicators)
+- LEDs, small SMD ones (Power / Charging indicators)
+- 10K / 1K resistors
+- 1uF / 0.1uF Capacitors
 
 ### For watching battery percentage
 - 2x 100 K ohm resistor
@@ -23,7 +25,7 @@
 
 ### Custom PCB wiring
 
-| Function          | ESP32-S3 Pin (GPIO) | Target Component & Pin      | Note                                      |
+| Name          | ESP32-S3 Pin (GPIO) | Where to connect      | Note                                      |
 |:------------------|:--------------------|:----------------------------|:------------------------------------------|
 | **Power (3.3V)** | **3V3** | all components (VCC / VDD / +)     | from AP2112K-3.3V                |
 | **Ground** | **GND** | everytihing (GND / -)           | -                      |
@@ -32,10 +34,10 @@
 | **Display: CS** | **GPIO 10** | FPC Pin 8                   |                                |
 | **Display: DC** | **GPIO 9** | FPC Pin 9                   |                   |
 | **Display: RESET**| **GPIO 8** | FPC Pin 10                  |                             |
-| **Audio: BCK** | **GPIO 1** | DAC: BCK                    |                              |
-| **Audio: DIN** | **GPIO 41** | DAC: DIN                    |                                |
-| **Audio: LRCK** | **GPIO 42** | DAC: LRCK                   |               |
-| **Audio: SCK** | **GND** | DAC: SCK                   |    so it doesnt use esp32 clock           | 
+| **DAC: BCK** | **GPIO 1** | DAC: BCK                    |                              |
+| **DAC: DIN** | **GPIO 41** | DAC: DIN                    |                                |
+| **DAC: LRCK** | **GPIO 42** | DAC: LRCK                   |               |
+| **DAC: SCK** | **GND** | DAC: SCK                   |    so it doesnt use esp32 clock           | 
 | **microSD: CLK** | **GPIO 14** | SD: CLK                     |                                 |
 | **microSD: CMD** | **GPIO 15** | SD: CMD                     |                               |
 | **microSD: D0** | **GPIO 2** | SD: D0                      | same as DAC DIN,       |
@@ -45,8 +47,9 @@
 | **USB Data -** | **GPIO 19** | USB-C: D-                   |                   |
 | **USB Data +** | **GPIO 20** | USB-C: D+                   |                   |
 | **Battery Check** | **GPIO 5** | node A, voltage divider [here](#for-watching-battery-percentage)    |  0V–3.3V for bat percentabe         |
+| **Bluetooth status**| **GPIO 45** | RGB LED blue leg (thru Res)  | BT status       |
 
-### 5-way button
+### 5-way button connections
 
 | Button           | ESP32-S3 Pin | Mode / Logic        | Function                             |
 |:-----------------|:-------------|:--------------------|:-------------------------------------|
@@ -60,14 +63,15 @@
 
 | Component        | Connection 1       | Connection 2       | Purpose                              |
 |:-----------------|:-------------------|:-------------------|:-------------------------------------|
-| **EN Resistor** | ESP32 Pin: EN      | 3.3V (10kΩ)        | prevents shutdown (pull-up)         |
-| **Boot Resistor**| ESP32 Pin: GPIO 0  | 3.3V (10kΩ)        | prevents random boot loops           |
+| **EN Resistor** | ESP32 Pin: EN      | 3.3V (10kΩ RESISTOR!!!)        | prevents shutdown (pull-up)         |
+| **Boot Resistor**| ESP32 Pin: GPIO 0  | 3.3V (10kΩ RESISTOR!!!)        | prevents random boot loops           |
+> EN >>> GND U HAVE TO USE 1uF CAPACITOR OK?!!!
 
 ### esp controls / indicators
 
 | Item              | Connection A | Connection B                | Note                                  |
 |:------------------|:-------------|:----------------------------|:------------------------------------------|
-| **Charging LED** | USB 5V (1kΩ R) | TP4056 pin 7 (CHRG)         | prolly red LED                  |
-| **Full LED** | USB 5V (1kΩ) | TP4056 Pin 6 (STDBY)        | green when battery full?                     |
-| **Reset Button** | EN Pin       | GND (momentary)             | restart esp                       |
-| **Boot Button** | GPIO 0       | GND (momentary)             |  Flash Mode                 |
+| **charging (red)** | USB 5V (1kΩ R !!) | TP4056 pin 7 (CHRG)         | prolly red LED                  |
+| **full (green)** | USB 5V (1kΩ R !!) | TP4056 Pin 6 (STDBY)        | green when battery full?                     |
+| **Reset btn** | EN Pin       | GND (for a bit)             | restart esp                       |
+| **Boot btn** | GPIO 0       | GND (for a bit)             |  flash mode for esp                 |
