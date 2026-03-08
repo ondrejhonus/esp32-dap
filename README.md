@@ -44,7 +44,7 @@
 | **microSD: D3** | **GPIO 13** | SD: D3                      |              |
 | **USB Data -** | **GPIO 19** | USB-C: D-                   |                   |
 | **USB Data +** | **GPIO 20** | USB-C: D+                   |                   |
-| **Battery Check** | **GPIO 5** | node A, volatge divider    |  0V–3.3V for bat percentabe         |
+| **Battery Check** | **GPIO 5** | node A, voltage divider [here](#for-watching-battery-percentage)    |  0V–3.3V for bat percentabe         |
 
 ### 5-way button
 
@@ -62,3 +62,12 @@
 |:-----------------|:-------------------|:-------------------|:-------------------------------------|
 | **EN Resistor** | ESP32 Pin: EN      | 3.3V (10kΩ)        | prevents shutdown (pull-up)         |
 | **Boot Resistor**| ESP32 Pin: GPIO 0  | 3.3V (10kΩ)        | prevents random boot loops           |
+
+### esp controls / indicators
+
+| Item              | Connection A | Connection B                | Note                                  |
+|:------------------|:-------------|:----------------------------|:------------------------------------------|
+| **Charging LED** | USB 5V (1kΩ R) | TP4056 pin 7 (CHRG)         | prolly red LED                  |
+| **Full LED** | USB 5V (1kΩ) | TP4056 Pin 6 (STDBY)        | green when battery full?                     |
+| **Reset Button** | EN Pin       | GND (momentary)             | restart esp                       |
+| **Boot Button** | GPIO 0       | GND (momentary)             |  Flash Mode                 |
