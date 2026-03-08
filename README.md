@@ -1,5 +1,5 @@
 # ESP-32 Digital Audio Player
-
+A DIY DAP made with an esp32-s3 board
 
 ## Parts
 - [ESP32-S3 Chip](https://www.aliexpress.com/item/1005006214506085.html?spm=a2g0o.cart.0.0.2dae38daCLOcHa&mp=1&pdp_npi=6%40dis%21CZK%21CZK%2099.49%21CZK%2099.49%21%21CZK%2099.49%21%21%21%40211b653717729246377494041e4aca%2112000036313776249%21ct%21CZ%214581780593%21%212%210%21&pdp_ext_f=%7B%22cart2PdpParams%22%3A%7B%22pdpBusinessMode%22%3A%22retail%22%7D%7D)
@@ -18,58 +18,58 @@
 
 ### For watching battery percentage
 - 2x 100 K ohm resistor
-    - One to Battery(+), one to ground, the middle point to ADC on esp32 (eg. GPIO4)
+    - One to Battery(+), one to ground, the middle point to ADC on esp32 (eg. GPIO 5)
 - 1x Filter Capacitor for clean power (0.1uF)
 
 ## Connections
 
 ### Custom PCB wiring
 
-| Name          | ESP32-S3 Pin (GPIO) | Where to connect      | Note                                      |
+| Name              | ESP32-S3 Pin (GPIO) | Where to connect            | Note                                      |
 |:------------------|:--------------------|:----------------------------|:------------------------------------------|
-| **Power (3.3V)** | **3V3** | all components (VCC / VDD / +)     | from AP2112K-3.3V                |
-| **Ground** | **GND** | everytihing (GND / -)           | -                      |
-| **Display: SCK** | **GPIO 18** | FPC Pin 12                  |                                  |
-| **Display: MOSI** | **GPIO 17** | FPC Pin 11                  |            |
-| **Display: CS** | **GPIO 10** | FPC Pin 8                   |                                |
-| **Display: DC** | **GPIO 9** | FPC Pin 9                   |                   |
-| **Display: RESET**| **GPIO 8** | FPC Pin 10                  |                             |
-| **DAC: BCK** | **GPIO 1** | DAC: BCK                    |                              |
-| **DAC: DIN** | **GPIO 41** | DAC: DIN                    |                                |
-| **DAC: LRCK** | **GPIO 42** | DAC: LRCK                   |               |
-| **DAC: SCK** | **GND** | DAC: SCK                   |    so it doesnt use esp32 clock           | 
-| **microSD: CLK** | **GPIO 14** | SD: CLK                     |                                 |
-| **microSD: CMD** | **GPIO 15** | SD: CMD                     |                               |
-| **microSD: D0** | **GPIO 2** | SD: D0                      | same as DAC DIN,       |
-| **microSD: D1** | **GPIO 4** | SD: D1                      |                                |
-| **microSD: D2** | **GPIO 12** | SD: D2                      | same as SPI SCK         |
-| **microSD: D3** | **GPIO 13** | SD: D3                      |              |
-| **USB Data -** | **GPIO 19** | USB-C: D-                   |                   |
-| **USB Data +** | **GPIO 20** | USB-C: D+                   |                   |
-| **Battery Check** | **GPIO 5** | node A, voltage divider [here](#for-watching-battery-percentage)    |  0V–3.3V for bat percentabe         |
-| **Bluetooth status**| **GPIO 45** | RGB LED blue leg (thru Res)  | BT status       |
+| **Power (3.3V)** | **3V3** | all components (VCC / VDD / +)     | from AP2112K-3.3V                 |
+| **Ground** | **GND** | everytihing (GND / -)           | -                       |
+| **Display: SCK** | **GPIO 12** | FPC Pin 12                  | SPI native pin           |
+| **Display: MOSI** | **GPIO 11** | FPC Pin 11                  | SPI native pin            |
+| **Display: CS** | **GPIO 10** | FPC Pin 8                    |                                 |
+| **Display: DC** | **GPIO 9** | FPC Pin 9                    |                   |
+| **Display: RESET**| **GPIO 48** | FPC Pin 10                  |                               |
+| **DAC: BCK** | **GPIO 1** | DAC: BCK                     |                               |
+| **DAC: DIN** | **GPIO 41** | DAC: DIN                     |                                  |
+| **DAC: LRCK** | **GPIO 42** | DAC: LRCK                    |                |
+| **DAC: SCK** | **GND** | DAC: SCK                    | so it doesnt use esp32 clock            | 
+| **microSD: CLK** | **GPIO 14** | SD: CLK                      | esp sdio clock                                  |
+| **microSD: CMD** | **GPIO 15** | SD: CMD                      | esp SDIO cmd                               |
+| **microSD: D0** | **GPIO 2** | SD: D0                       | esp sdio data 0 native       |
+| **microSD: D1** | **GPIO 4** | SD: D1                       | esp sdio data 1 native                                 |
+| **microSD: D2** | **GPIO 47** | SD: D2                       |           |
+| **microSD: D3** | **GPIO 21** | SD: D3                       |               |
+| **USB Data -** | **GPIO 19** | USB-C: D-                    |                   |
+| **USB Data +** | **GPIO 20** | USB-C: D+                    |                   |
+| **Battery Check** | **GPIO 5** | node A, voltage divider [here](#for-watching-battery-percentage)    |  0V–3.3V for bat percentage          |
+| **RGB Status (B)**| **GPIO 3** | RGB LED blue leg (thru Res)  | BT status / Software Status       |
 
 ### 5-way button connections
 
-| Button           | ESP32-S3 Pin | Mode / Logic        | Function                             |
+| Button            | ESP32-S3 Pin | Mode / Logic        | Function                             |
 |:-----------------|:-------------|:--------------------|:-------------------------------------|
 | **Up** | **GPIO 6** | internal pull-up    | Scroll Up / Vol Up (Hold)            |
 | **Down** | **GPIO 7** | internal pull-up    | Scroll Down / Vol Down (Hold)        |
 | **Prev** | **GPIO 16** | internal pull-up    | Previous Song / Back (Hold)          |
-| **Next** | **GPIO 21** | internal pull-up    | Next Song                            |
-| **Play / Pause** | **GPIO 3** | internal pull-up    | Play-Pause / Shutdown (Hold)         |
+| **Next** | **GPIO 13** | internal pull-up    | Next Song                            |
+| **Play / Pause** | **GPIO 40** | internal pull-up    | Play-Pause / Shutdown (Hold)         |
 
 ### Boring stuff coz i chose a bare esp chip
 
-| Component        | Connection 1       | Connection 2       | Purpose                              |
+| Component         | Connection 1       | Connection 2       | Purpose                              |
 |:-----------------|:-------------------|:-------------------|:-------------------------------------|
-| **EN Resistor** | ESP32 Pin: EN      | 3.3V (10kΩ RESISTOR!!!)        | prevents shutdown (pull-up)         |
-| **Boot Resistor**| ESP32 Pin: GPIO 0  | 3.3V (10kΩ RESISTOR!!!)        | prevents random boot loops           |
-> EN >>> GND U HAVE TO USE 1uF CAPACITOR OK?!!!
+| **EN Resistor** | ESP32 Pin: EN      | 3.3V (10kΩ RESISTOR!!!)        | prevents shutdown (pull-up)          |
+| **Boot Resistor**| ESP32 Pin: GPIO 0  | 3.3V (10kΩ RESISTOR!!!)        | prevents random boot loops            |
+> EN >>> GND U HAVE TO USE 1uF CAPACITOR OK?!!! (resistor to 3.3V, Capacitor to GND basically)
 
 ### esp controls / indicators
 
-| Item              | Connection A | Connection B                | Note                                  |
+| Item               | Connection A | Connection B                 | Note                                  |
 |:------------------|:-------------|:----------------------------|:------------------------------------------|
 | **charging (red)** | USB 5V (1kΩ R !!) | TP4056 pin 7 (CHRG)         | prolly red LED                  |
 | **full (green)** | USB 5V (1kΩ R !!) | TP4056 Pin 6 (STDBY)        | green when battery full?                     |
